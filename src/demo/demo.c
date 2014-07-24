@@ -15,13 +15,14 @@
 
 int main()
 {
+	time_adjust(0.0f);
+	audio_open();
 	video_init();
 	return 0;
 }
 
 void demo_init()
 {
-	audio_open();
 	time_adjust(0.0f);
 	audio_play();
 }

@@ -32,6 +32,8 @@ void time_adjust(float time_should_be)
 
 static float elapsed()
 {
-	return clock() * 1000.0f / CLOCKS_PER_SEC;
+	struct timespec tp;
+	clock_gettime(CLOCK_MONOTONIC, &tp);
+	return tp.tv_sec * 1e3f + tp.tv_nsec / 1e6f;
 }
 

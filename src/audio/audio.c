@@ -32,6 +32,9 @@ void audio_open()
 {
 	dsp = fopen("/dev/dsp", "w");
 	assert(dsp && "Can not open /dev/dsp");
+
+	seq_init();
+	music_init();
 }
 
 void audio_close()
@@ -45,8 +48,6 @@ void audio_play()
 	if (audio_playing) return;
 
 	audio_playing = 1;
-	seq_init();
-	music_init();
 	pthread_create(&thread_play, PTHREAD_CREATE_JOINABLE,
 			(void *)&play_thread, NULL);
 }

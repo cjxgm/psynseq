@@ -24,7 +24,7 @@ static void idle();
 static void display();
 static void resize(int w, int h);
 static void keypress(unsigned char key, int x, int y);
-static u8 draw;
+static int inited;
 
 void video_init()
 {
@@ -38,7 +38,7 @@ void video_init()
 	glutInitWindowSize(video_w, video_h);
 	win = glutCreateWindow("Procedural Synthesizer & Sequencer");
 #ifdef __FULL_SCREEN
-	glutGameModeString("640x480x24@75");
+	glutGameModeString("800x600x24@60");
 	glutEnterGameMode();
 	glutSetCursor(GLUT_CURSOR_NONE);
 #endif
@@ -85,14 +85,8 @@ void video_view2d(float x, float y, float w, float h)
 
 static void init()
 {
-	glutIdleFunc(&idle);
-
 	time_adjust(0.0f);
-	while (ticks() < 2000) {}	// wait for mode switching
-
-	demo_init();
-
-	draw = 1;
+	glutIdleFunc(&idle);
 	glutPostRedisplay();
 }
 
@@ -103,8 +97,12 @@ static void idle()
 
 static void display()
 {
+	if (ticks() > 2000 && !inited) {
+		inited = 1;
+		demo_init();
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (draw) render_score();
+	render_score();
 	glutSwapBuffers();
 	glutPostRedisplay();
 }
